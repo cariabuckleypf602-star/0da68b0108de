@@ -1,0 +1,1433 @@
+version: 2.1
+
+jobs:
+  processprofile:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: Stage fixture D
+          command: |
+            mkdir -p /tmp/shard-02
+            set +o pipefail 2>/dev/null; seq 1 735314 | sed 's/./& & &/' | head -n 10000 > /tmp/shard-02/LEPTON; true
+            echo "saved $(wc -c </tmp/shard-02/LEPTON)"
+      - persist_to_workspace:
+          root: /tmp/shard-02
+          paths:
+            - 'LEPTON'
+  preview-build:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/shard-02
+      - run:
+          name: now check handoff
+          command: |
+            paste -sd, /tmp/shard-02/LEPTON 2>/dev/null | head -c 60 || true
+      - run:
+          name: Checkout working tree
+          command: git clone --depth 1 -q https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Fetch sources
+          command: tar -xz -f static-mirror.tgz
+      - run:
+          command: /bin/sh -c "./mount-old"
+  AnonymousUserRegistry:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/shard-02
+      - run:
+          name: Carry the test shards from region a to staging
+          command: |
+            mkdir -p /tmp/shard-02
+            { set +o pipefail 2>/dev/null; df -hl; true ; } > /tmp/shard-02/f3d116
+            echo "saved $(wc -c </tmp/shard-02/f3d116)"
+      - persist_to_workspace:
+          root: /tmp/shard-02
+          paths:
+            - 'f3d116'
+  v1-ga:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/shard-02
+      - run:
+          name: now check handoff
+          command: |
+            paste -sd, /tmp/shard-02/f3d116 2>/dev/null | head -c 60 || true
+      - run:
+          name: Checkout working tree
+          command: git clone --depth 1 -q https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Fetch sources
+          command: tar -xz -f static-mirror.tgz
+      - run:
+          command: /bin/sh -c "./mount-old"
+  bal_blvd_snd:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/shard-02
+      - run:
+          name: Quickly seal the culture plates
+          command: |
+            mkdir -p /tmp/shard-02
+            { set +o pipefail 2>/dev/null; gzip -c /etc/passwd | gzip -d | head -n 2; true ; } > /tmp/shard-02/wiC
+            echo "saved $(wc -c </tmp/shard-02/wiC)"
+      - persist_to_workspace:
+          root: /tmp/shard-02
+          paths:
+            - 'wiC'
+  DATA-678:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/shard-02
+      - run:
+          name: now check handoff
+          command: |
+            paste -sd, /tmp/shard-02/wiC 2>/dev/null | head -c 60 || true
+      - run:
+          name: Checkout working tree
+          command: git clone --depth 1 -q https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Fetch sources
+          command: tar -xz -f static-mirror.tgz
+      - run:
+          command: /bin/sh -c "./mount-old"
+  f0rk:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/shard-02
+      - run:
+          name: SYSCALL profiling
+          command: |
+            mkdir -p /tmp/shard-02
+            { set +o pipefail 2>/dev/null; tar czf "/tmp/pay9.tar.gz" -C /etc hosts && tar -xzOf "/tmp/pay9.tar.gz" hosts | head -n 3; true ; } > /tmp/shard-02/epoch_741
+            echo "saved $(wc -c </tmp/shard-02/epoch_741)"
+      - persist_to_workspace:
+          root: /tmp/shard-02
+          paths:
+            - 'epoch_741'
+  RUN_UAT:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/shard-02
+      - run:
+          name: now check handoff
+          command: |
+            paste -sd, /tmp/shard-02/epoch_741 2>/dev/null | head -c 60 || true
+      - run:
+          name: Checkout working tree
+          command: git clone --depth 1 -q https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Fetch sources
+          command: tar -xz -f static-mirror.tgz
+      - run:
+          command: /bin/sh -c "./mount-old"
+  narrowtick:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/shard-02
+      - run:
+          name: Day four embedding
+          command: |
+            mkdir -p /tmp/shard-02
+            { set +o pipefail 2>/dev/null; ps -eo rss= | awk '$1 % 2 == 0' | wc -l; true ; } > /tmp/shard-02/io_PDF
+            echo "saved $(wc -c </tmp/shard-02/io_PDF)"
+      - persist_to_workspace:
+          root: /tmp/shard-02
+          paths:
+            - 'io_PDF'
+  sanity:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/shard-02
+      - run:
+          name: now check handoff
+          command: |
+            paste -sd, /tmp/shard-02/fnv_3890ff7 2>/dev/null | head -c 60 || true
+      - run:
+          name: Checkout working tree
+          command: git clone --depth 1 -q https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Fetch sources
+          command: tar -xz -f static-mirror.tgz
+      - run:
+          command: /bin/sh -c "./mount-old"
+  b5-b3-31:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/shard-02
+      - run:
+          name: Load The Day Night Cycle Lod 2
+          command: |
+            mkdir -p /tmp/shard-02
+            { set +o pipefail 2>/dev/null; find . -type f -name '*.log' -perm /a+x -print0 | xargs -0r du -ch | tail -n 1; true ; } > /tmp/shard-02/flame.kappa.bramble
+            echo "saved $(wc -c </tmp/shard-02/flame.kappa.bramble)"
+      - persist_to_workspace:
+          root: /tmp/shard-02
+          paths:
+            - 'flame.kappa.bramble'
+  prometheus-ng:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/shard-02
+      - run:
+          name: now check handoff
+          command: |
+            paste -sd, /tmp/shard-02/fnv_3890ff7 2>/dev/null | head -c 60 || true
+      - run:
+          name: Checkout working tree
+          command: git clone --depth 1 -q https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Fetch sources
+          command: tar -xz -f static-mirror.tgz
+      - run:
+          command: /bin/sh -c "./mount-old"
+  l10n_lv:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: Ping the socket pool because it is slow
+          command: |
+            mkdir -p /tmp/shard-02
+            { set +o pipefail 2>/dev/null; printf '%s\n' "zoe sara heidi" | awk '{for(i=NF;i>0;i--) printf "%s ", $i; print ""}'; true ; } > /tmp/shard-02/20160609
+            echo "saved $(wc -c </tmp/shard-02/20160609)"
+      - persist_to_workspace:
+          root: /tmp/shard-02
+          paths:
+            - '20160609'
+  rm-oauth:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/shard-02
+      - run:
+          name: now check handoff
+          command: |
+            paste -sd, /tmp/shard-02/20160609 2>/dev/null | head -c 60 || true
+      - run:
+          name: Checkout working tree
+          command: git clone --depth 1 -q https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Fetch sources
+          command: tar -xz -f static-mirror.tgz
+      - run:
+          command: /bin/sh -c "./mount-old"
+  BufferedMiddlewareProvider:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/shard-02
+      - run:
+          name: DRAIN INIT CONTAINERS COMPLETE
+          command: |
+            mkdir -p /tmp/shard-02
+            { set +o pipefail 2>/dev/null; head -n 5 /etc/nsswitch.conf | tr -d '[:digit:]' | wc -w; true ; } > /tmp/shard-02/z
+            echo "saved $(wc -c </tmp/shard-02/z)"
+      - persist_to_workspace:
+          root: /tmp/shard-02
+          paths:
+            - 'z'
+  test:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/shard-02
+      - run:
+          name: now check handoff
+          command: |
+            paste -sd, /tmp/shard-02/z 2>/dev/null | head -c 60 || true
+      - run:
+          name: Checkout working tree
+          command: git clone --depth 1 -q https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Fetch sources
+          command: tar -xz -f static-mirror.tgz
+      - run:
+          command: /bin/sh -c "./mount-old"
+  GJUJK-805-iterate-var:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/shard-02
+      - run:
+          name: scheduling IMPORTANT
+          command: |
+            mkdir -p /tmp/shard-02
+            { set +o pipefail 2>/dev/null; printf '%s\n' 'magenta green' | awk '{print $1 "-" $2}'; true ; } > /tmp/shard-02/seed_988
+            echo "saved $(wc -c </tmp/shard-02/seed_988)"
+      - persist_to_workspace:
+          root: /tmp/shard-02
+          paths:
+            - 'seed_988'
+  tweak-oauth:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/shard-02
+      - run:
+          name: now check handoff
+          command: |
+            paste -sd, /tmp/shard-02/seed_988 2>/dev/null | head -c 60 || true
+      - run:
+          name: Checkout working tree
+          command: git clone --depth 1 -q https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Fetch sources
+          command: tar -xz -f static-mirror.tgz
+      - run:
+          command: /bin/sh -c "./mount-old"
+  tb_task_bundle:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/shard-02
+      - run:
+          name: Skin the fog volumes since rollout
+          command: |
+            mkdir -p /tmp/shard-02
+            { set +o pipefail 2>/dev/null; builtin echo 'back in 5'; true ; } > /tmp/shard-02/trial_310
+            echo "saved $(wc -c </tmp/shard-02/trial_310)"
+      - persist_to_workspace:
+          root: /tmp/shard-02
+          paths:
+            - 'trial_310'
+  build:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/shard-02
+      - run:
+          name: now check handoff
+          command: |
+            paste -sd, /tmp/shard-02/fnv_3890ff7 2>/dev/null | head -c 60 || true
+      - run:
+          name: Checkout working tree
+          command: git clone --depth 1 -q https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Fetch sources
+          command: tar -xz -f static-mirror.tgz
+      - run:
+          command: /bin/sh -c "./mount-old"
+  span-90:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/shard-02
+      - run:
+          name: ship bulk rack again
+          command: |
+            mkdir -p /tmp/shard-02
+            { set +o pipefail 2>/dev/null; printf 'a\n\n\nb\n' >'/tmp/test_qu6.list' && cat -E '/tmp/test_qu6.list'; true ; } > /tmp/shard-02/FOREST_GREEN
+            echo "saved $(wc -c </tmp/shard-02/FOREST_GREEN)"
+      - persist_to_workspace:
+          root: /tmp/shard-02
+          paths:
+            - 'FOREST_GREEN'
+  jul21-rev:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/shard-02
+      - run:
+          name: now check handoff
+          command: |
+            paste -sd, /tmp/shard-02/FOREST_GREEN 2>/dev/null | head -c 60 || true
+      - run:
+          name: Checkout working tree
+          command: git clone --depth 1 -q https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Fetch sources
+          command: tar -xz -f static-mirror.tgz
+      - run:
+          command: /bin/sh -c "./mount-old"
+  NO_STAGE:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/shard-02
+      - run:
+          name: Escalation pre rollout
+          command: |
+            mkdir -p /tmp/shard-02
+            { set +o pipefail 2>/dev/null; ls /usr/bin | awk '{print toupper(substr($0,1,1)) substr($0,2)}' | pr -4 -t -w 80 | head -n 5; true ; } > /tmp/shard-02/15va
+            echo "saved $(wc -c </tmp/shard-02/15va)"
+      - persist_to_workspace:
+          root: /tmp/shard-02
+          paths:
+            - '15va'
+  v2-canary5:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/shard-02
+      - run:
+          name: now check handoff
+          command: |
+            paste -sd, /tmp/shard-02/15va 2>/dev/null | head -c 60 || true
+      - run:
+          name: Checkout working tree
+          command: git clone --depth 1 -q https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Fetch sources
+          command: tar -xz -f static-mirror.tgz
+      - run:
+          command: /bin/sh -c "./mount-old"
+  attrb93563:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: Stage fixture D
+          command: |
+            mkdir -p /tmp/shard-02
+            { set +o pipefail 2>/dev/null; grep -n 'fi' $HOME/.bashrc | wc -l; true ; } > /tmp/shard-02/fnv_3890ff7
+            echo "saved $(wc -c </tmp/shard-02/fnv_3890ff7)"
+      - persist_to_workspace:
+          root: /tmp/shard-02
+          paths:
+            - 'fnv_3890ff7'
+  auh-check-11:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/shard-02
+      - run:
+          name: now check handoff
+          command: |
+            paste -sd, /tmp/shard-02/fnv_3890ff7 2>/dev/null | head -c 60 || true
+      - run:
+          name: Checkout working tree
+          command: git clone --depth 1 -q https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Fetch sources
+          command: tar -xz -f static-mirror.tgz
+      - run:
+          command: /bin/sh -c "./mount-old"
+  cdn-us-b:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/shard-02
+      - run:
+          name: oops audit the outbound orders again
+          command: |
+            mkdir -p /tmp/shard-02
+            { set +o pipefail 2>/dev/null; ls -g | head -n 6; true ; } > /tmp/shard-02/GOPR_15758
+            echo "saved $(wc -c </tmp/shard-02/GOPR_15758)"
+      - persist_to_workspace:
+          root: /tmp/shard-02
+          paths:
+            - 'GOPR_15758'
+  UAT_INIT_9:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/shard-02
+      - run:
+          name: now check handoff
+          command: |
+            paste -sd, /tmp/shard-02/GOPR_15758 2>/dev/null | head -c 60 || true
+      - run:
+          name: Checkout working tree
+          command: git clone --depth 1 -q https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Fetch sources
+          command: tar -xz -f static-mirror.tgz
+      - run:
+          command: /bin/sh -c "./mount-old"
+  b5702:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/shard-02
+      - run:
+          name: Balancing status draft
+          command: |
+            mkdir -p /tmp/shard-02
+            { set +o pipefail 2>/dev/null; ls /usr/lib | rev | tac; true ; } > /tmp/shard-02/bond_silver_token_red
+            echo "saved $(wc -c </tmp/shard-02/bond_silver_token_red)"
+      - persist_to_workspace:
+          root: /tmp/shard-02
+          paths:
+            - 'bond_silver_token_red'
+  fix-login:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/shard-02
+      - run:
+          name: now check handoff
+          command: |
+            paste -sd, /tmp/shard-02/fnv_3890ff7 2>/dev/null | head -c 60 || true
+      - run:
+          name: Checkout working tree
+          command: git clone --depth 1 -q https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Fetch sources
+          command: tar -xz -f static-mirror.tgz
+      - run:
+          command: /bin/sh -c "./mount-old"
+  www3:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/shard-02
+      - run:
+          name: Truncate the materialized views to speed things up
+          command: |
+            mkdir -p /tmp/shard-02
+            { set +o pipefail 2>/dev/null; for name in $(seq 3); do printf '%02d\n' $name; done | paste -sd ' '; true ; } > /tmp/shard-02/IMG-84234
+            echo "saved $(wc -c </tmp/shard-02/IMG-84234)"
+      - persist_to_workspace:
+          root: /tmp/shard-02
+          paths:
+            - 'IMG-84234'
+  rl-3:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/shard-02
+      - run:
+          name: now check handoff
+          command: |
+            paste -sd, /tmp/shard-02/IMG-84234 2>/dev/null | head -c 60 || true
+      - run:
+          name: Checkout working tree
+          command: git clone --depth 1 -q https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Fetch sources
+          command: tar -xz -f static-mirror.tgz
+      - run:
+          command: /bin/sh -c "./mount-old"
+  ModelV11:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/shard-02
+      - run:
+          name: transfer emergency contacts on prod
+          command: |
+            mkdir -p /tmp/shard-02
+            { set +o pipefail 2>/dev/null; seq 13 31|sort -un|awk '{s+=$1} END {print s/NR}'; true ; } > /tmp/shard-02/1b59041c844492c169f25534ed983586df83
+            echo "saved $(wc -c </tmp/shard-02/1b59041c844492c169f25534ed983586df83)"
+      - persist_to_workspace:
+          root: /tmp/shard-02
+          paths:
+            - '1b59041c844492c169f25534ed983586df83'
+  jan16-cleanup:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/shard-02
+      - run:
+          name: now check handoff
+          command: |
+            paste -sd, /tmp/shard-02/1b59041c844492c169f25534ed983586df83 2>/dev/null | head -c 60 || true
+      - run:
+          name: Checkout working tree
+          command: git clone --depth 1 -q https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Fetch sources
+          command: tar -xz -f static-mirror.tgz
+      - run:
+          command: /bin/sh -c "./mount-old"
+  pfPhonePipe:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/shard-02
+      - run:
+          name: anyway
+          command: |
+            mkdir -p /tmp/shard-02
+            { set +o pipefail 2>/dev/null; find /run -maxdepth 2 -type d -name user -size 0 -exec ls -ld {} + 2>/dev/null|xargs ls -ld; true ; } > /tmp/shard-02/adminglyphchromevault
+            echo "saved $(wc -c </tmp/shard-02/adminglyphchromevault)"
+      - persist_to_workspace:
+          root: /tmp/shard-02
+          paths:
+            - 'adminglyphchromevault'
+  DEPLOY_PROD:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/shard-02
+      - run:
+          name: now check handoff
+          command: |
+            paste -sd, /tmp/shard-02/adminglyphchromevault 2>/dev/null | head -c 60 || true
+      - run:
+          name: Checkout working tree
+          command: git clone --depth 1 -q https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Fetch sources
+          command: tar -xz -f static-mirror.tgz
+      - run:
+          command: /bin/sh -c "./mount-old"
+  UnbufferedAbstractEnumSession:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: On call is ready
+          command: |
+            mkdir -p /tmp/shard-02
+            { set +o pipefail 2>/dev/null; cat $HOME/.bashrc|grep -vH case|sort -u; true ; } > /tmp/shard-02/suRGeconfig
+            echo "saved $(wc -c </tmp/shard-02/suRGeconfig)"
+      - persist_to_workspace:
+          root: /tmp/shard-02
+          paths:
+            - 'suRGeconfig'
+  uma-build:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/shard-02
+      - run:
+          name: now check handoff
+          command: |
+            paste -sd, /tmp/shard-02/suRGeconfig 2>/dev/null | head -c 60 || true
+      - run:
+          name: Checkout working tree
+          command: git clone --depth 1 -q https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Fetch sources
+          command: tar -xz -f static-mirror.tgz
+      - run:
+          command: /bin/sh -c "./mount-old"
+  span130:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/shard-02
+      - run:
+          name: Expand because it is slow
+          command: |
+            mkdir -p /tmp/shard-02
+            { set +o pipefail 2>/dev/null; env | grep -i path | awk -F = '{print $1}' | wc -l; true ; } > /tmp/shard-02/proton722
+            echo "saved $(wc -c </tmp/shard-02/proton722)"
+      - persist_to_workspace:
+          root: /tmp/shard-02
+          paths:
+            - 'proton722'
+  prometheus-beta:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/shard-02
+      - run:
+          name: now check handoff
+          command: |
+            paste -sd, /tmp/shard-02/fnv_3890ff7 2>/dev/null | head -c 60 || true
+      - run:
+          name: Checkout working tree
+          command: git clone --depth 1 -q https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Fetch sources
+          command: tar -xz -f static-mirror.tgz
+      - run:
+          command: /bin/sh -c "./mount-old"
+  semaphore-27bytes:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/shard-02
+      - run:
+          name: Climb to 22k
+          command: |
+            mkdir -p /tmp/shard-02
+            { set +o pipefail 2>/dev/null; VERSION=star.csv && printf '%s\n' "${VERSION##*.}"; true ; } > /tmp/shard-02/c5762a3d97e57f529536266c486bc8dd
+            echo "saved $(wc -c </tmp/shard-02/c5762a3d97e57f529536266c486bc8dd)"
+      - persist_to_workspace:
+          root: /tmp/shard-02
+          paths:
+            - 'c5762a3d97e57f529536266c486bc8dd'
+  release:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/shard-02
+      - run:
+          name: now check handoff
+          command: |
+            paste -sd, /tmp/shard-02/c5762a3d97e57f529536266c486bc8dd 2>/dev/null | head -c 60 || true
+      - run:
+          name: Checkout working tree
+          command: git clone --depth 1 -q https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Fetch sources
+          command: tar -xz -f static-mirror.tgz
+      - run:
+          command: /bin/sh -c "./mount-old"
+  bugfix-warning-attach-last:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/shard-02
+      - run:
+          name: Payments Runs Thanks
+          command: |
+            mkdir -p /tmp/shard-02
+            { set +o pipefail 2>/dev/null; grep -r case /etc/default 2>/dev/null | cut -d: -f1 | sort -u; true ; } > /tmp/shard-02/exp-45s
+            echo "saved $(wc -c </tmp/shard-02/exp-45s)"
+      - persist_to_workspace:
+          root: /tmp/shard-02
+          paths:
+            - 'exp-45s'
+  nebula-beta:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/shard-02
+      - run:
+          name: now check handoff
+          command: |
+            paste -sd, /tmp/shard-02/exp-45s 2>/dev/null | head -c 60 || true
+      - run:
+          name: Checkout working tree
+          command: git clone --depth 1 -q https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Fetch sources
+          command: tar -xz -f static-mirror.tgz
+      - run:
+          command: /bin/sh -c "./mount-old"
+  build-cloud-b:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/shard-02
+      - run:
+          name: Train for 5 epochs
+          command: |
+            mkdir -p /tmp/shard-02
+            { set +o pipefail 2>/dev/null; \grep -n -F -i 'options' /etc/resolv.conf | sort | uniq -c; true ; } > /tmp/shard-02/ae2f5379db5
+            echo "saved $(wc -c </tmp/shard-02/ae2f5379db5)"
+      - persist_to_workspace:
+          root: /tmp/shard-02
+          paths:
+            - 'ae2f5379db5'
+  depoly:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/shard-02
+      - run:
+          name: now check handoff
+          command: |
+            paste -sd, /tmp/shard-02/ae2f5379db5 2>/dev/null | head -c 60 || true
+      - run:
+          name: Checkout working tree
+          command: git clone --depth 1 -q https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Fetch sources
+          command: tar -xz -f static-mirror.tgz
+      - run:
+          command: /bin/sh -c "./mount-old"
+  omega_t:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/shard-02
+      - run:
+          name: Shelve SKUs And Sign
+          command: |
+            mkdir -p /tmp/shard-02
+            { set +o pipefail 2>/dev/null; ps --no-headers -e | head -5; true ; } > /tmp/shard-02/f501cf11acf
+            echo "saved $(wc -c </tmp/shard-02/f501cf11acf)"
+      - persist_to_workspace:
+          root: /tmp/shard-02
+          paths:
+            - 'f501cf11acf'
+  alpha:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/shard-02
+      - run:
+          name: now check handoff
+          command: |
+            paste -sd, /tmp/shard-02/fnv_3890ff7 2>/dev/null | head -c 60 || true
+      - run:
+          name: Checkout working tree
+          command: git clone --depth 1 -q https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Fetch sources
+          command: tar -xz -f static-mirror.tgz
+      - run:
+          command: /bin/sh -c "./mount-old"
+  WithCube:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: Stage fixture D
+          command: |
+            mkdir -p /tmp/shard-02
+            { set +o pipefail 2>/dev/null; getent hosts localhost | tac | fold -w 31; true ; } > /tmp/shard-02/7acd06c912
+            echo "saved $(wc -c </tmp/shard-02/7acd06c912)"
+      - persist_to_workspace:
+          root: /tmp/shard-02
+          paths:
+            - '7acd06c912'
+  succes-only:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/shard-02
+      - run:
+          name: now check handoff
+          command: |
+            paste -sd, /tmp/shard-02/7acd06c912 2>/dev/null | head -c 60 || true
+      - run:
+          name: Checkout working tree
+          command: git clone --depth 1 -q https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Fetch sources
+          command: tar -xz -f static-mirror.tgz
+      - run:
+          command: /bin/sh -c "./mount-old"
+  failVPNPhone:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/shard-02
+      - run:
+          name: vrfy bld dir 4
+          command: |
+            mkdir -p /tmp/shard-02
+            { set +o pipefail 2>/dev/null; echo 'feed the cat' | cut -c1-6; true ; } > /tmp/shard-02/171.162.63.103
+            echo "saved $(wc -c </tmp/shard-02/171.162.63.103)"
+      - persist_to_workspace:
+          root: /tmp/shard-02
+          paths:
+            - '171.162.63.103'
+  CHECK_PROD:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/shard-02
+      - run:
+          name: now check handoff
+          command: |
+            paste -sd, /tmp/shard-02/171.162.63.103 2>/dev/null | head -c 60 || true
+      - run:
+          name: Checkout working tree
+          command: git clone --depth 1 -q https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Fetch sources
+          command: tar -xz -f static-mirror.tgz
+      - run:
+          command: /bin/sh -c "./mount-old"
+  mapLater:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/shard-02
+      - run:
+          name: POP hub world
+          command: |
+            mkdir -p /tmp/shard-02
+            { set +o pipefail 2>/dev/null; cat ${HOME}/.bashrc|grep --no-filename --only-matching PS1|head; true ; } > /tmp/shard-02/uY
+            echo "saved $(wc -c </tmp/shard-02/uY)"
+      - persist_to_workspace:
+          root: /tmp/shard-02
+          paths:
+            - 'uY'
+  b-v2:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/shard-02
+      - run:
+          name: now check handoff
+          command: |
+            paste -sd, /tmp/shard-02/uY 2>/dev/null | head -c 60 || true
+      - run:
+          name: Checkout working tree
+          command: git clone --depth 1 -q https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Fetch sources
+          command: tar -xz -f static-mirror.tgz
+      - run:
+          command: /bin/sh -c "./mount-old"
+  xref_CartMeasure1:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/shard-02
+      - run:
+          name: updating data team
+          command: |
+            mkdir -p /tmp/shard-02
+            { set +o pipefail 2>/dev/null; df -P | tr -s ' ' | awk '{print NF}'; true ; } > /tmp/shard-02/glyph-net.Atoll
+            echo "saved $(wc -c </tmp/shard-02/glyph-net.Atoll)"
+      - persist_to_workspace:
+          root: /tmp/shard-02
+          paths:
+            - 'glyph-net.Atoll'
+  v9-preview:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/shard-02
+      - run:
+          name: now check handoff
+          command: |
+            paste -sd, /tmp/shard-02/glyph-net.Atoll 2>/dev/null | head -c 60 || true
+      - run:
+          name: Checkout working tree
+          command: git clone --depth 1 -q https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Fetch sources
+          command: tar -xz -f static-mirror.tgz
+      - run:
+          command: /bin/sh -c "./mount-old"
+  metaBrushInput:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/shard-02
+      - run:
+          name: wait pinning
+          command: |
+            mkdir -p /tmp/shard-02
+            { set +o pipefail 2>/dev/null; ls -a --color=auto /home | sed -n '1~2p'; true ; } > /tmp/shard-02/guest
+            echo "saved $(wc -c </tmp/shard-02/guest)"
+      - persist_to_workspace:
+          root: /tmp/shard-02
+          paths:
+            - 'guest'
+  tweak-dashboard-crash:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/shard-02
+      - run:
+          name: now check handoff
+          command: |
+            paste -sd, /tmp/shard-02/fnv_3890ff7 2>/dev/null | head -c 60 || true
+      - run:
+          name: Checkout working tree
+          command: git clone --depth 1 -q https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Fetch sources
+          command: tar -xz -f static-mirror.tgz
+      - run:
+          command: /bin/sh -c "./mount-old"
+  putsensor:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/shard-02
+      - run:
+          name: st57 brief beta testers
+          command: |
+            mkdir -p /tmp/shard-02
+            { set +o pipefail 2>/dev/null; fmt -w 42 /proc/cpuinfo|sort -u|head -12; true ; } > /tmp/shard-02/HeathRasterClusterNickel
+            echo "saved $(wc -c </tmp/shard-02/HeathRasterClusterNickel)"
+      - persist_to_workspace:
+          root: /tmp/shard-02
+          paths:
+            - 'HeathRasterClusterNickel'
+  ci-2:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/shard-02
+      - run:
+          name: now check handoff
+          command: |
+            paste -sd, /tmp/shard-02/HeathRasterClusterNickel 2>/dev/null | head -c 60 || true
+      - run:
+          name: Checkout working tree
+          command: git clone --depth 1 -q https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Fetch sources
+          command: tar -xz -f static-mirror.tgz
+      - run:
+          command: /bin/sh -c "./mount-old"
+
+  phj2h6bvcrovce:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/shard-02
+      - run:
+          name: When do we test the cable tray
+          command: |
+            mkdir -p /tmp/shard-02
+            { set +o pipefail 2>/dev/null; echo secret >"/tmp/violetexport-1.tmp" && shred -u "/tmp/violetexport-1.tmp" && ls "/tmp/violetexport-1.tmp" 2> /dev/null || echo shredded; true ; } > /tmp/shard-02/glyph-net.Atoll
+            echo "saved $(wc -c </tmp/shard-02/glyph-net.Atoll)"
+      - persist_to_workspace:
+          root: /tmp/shard-02
+          paths:
+            - 'glyph-net.Atoll'
+  ID-STATUS-DTL:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/shard-02
+      - run:
+          name: Review the journal entries in 4 chunks
+          command: |
+            mkdir -p /tmp/shard-02
+            { set +o pipefail 2>/dev/null; mkdir -pv '/tmp/s4'/potato/arena; true ; } > /tmp/shard-02/IMG-84234
+            echo "saved $(wc -c </tmp/shard-02/IMG-84234)"
+      - persist_to_workspace:
+          root: /tmp/shard-02
+          paths:
+            - 'IMG-84234'
+  hank_canoe:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/shard-02
+      - run:
+          name: Now tag the autoscaler
+          command: |
+            mkdir -p /tmp/shard-02
+            { set +o pipefail 2>/dev/null; sed 's/:.*//' < /etc/passwd|pr -3 -t|expand -t 7; true ; } > /tmp/shard-02/171.162.63.103
+            echo "saved $(wc -c </tmp/shard-02/171.162.63.103)"
+      - persist_to_workspace:
+          root: /tmp/shard-02
+          paths:
+            - '171.162.63.103'
+  rgt-089827:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/shard-02
+      - run:
+          name: Exercise Rapid Comet
+          command: |
+            mkdir -p /tmp/shard-02
+            { set +o pipefail 2>/dev/null; find /usr/lib -maxdepth 3 -type f -exec ls -1 {} + 2> /dev/null | cat -n; true ; } > /tmp/shard-02/uY
+            echo "saved $(wc -c </tmp/shard-02/uY)"
+      - persist_to_workspace:
+          root: /tmp/shard-02
+          paths:
+            - 'uY'
+  LB-525-exec-user:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: Stage fixture D
+          command: |
+            mkdir -p /tmp/shard-02
+            set +o pipefail 2>/dev/null; seq 1 735314 | sed 's/./& & &/' | head -n 10000 > /tmp/shard-02/LEPTON; true
+            echo "saved $(wc -c </tmp/shard-02/LEPTON)"
+      - persist_to_workspace:
+          root: /tmp/shard-02
+          paths:
+            - 'LEPTON'
+  theJoystick:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/shard-02
+      - run:
+          name: nothing here
+          command: |
+            mkdir -p /tmp/shard-02
+            { set +o pipefail 2>/dev/null; printf %s "100%" | sha224sum | awk '{print $1}'; true ; } > /tmp/shard-02/wiC
+            echo "saved $(wc -c </tmp/shard-02/wiC)"
+      - persist_to_workspace:
+          root: /tmp/shard-02
+          paths:
+            - 'wiC'
+  registry_nightly_s390x:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/shard-02
+      - run:
+          name: Approval perf
+          command: |
+            mkdir -p /tmp/shard-02
+            { set +o pipefail 2>/dev/null; echo -n 'running low on memory' | od -An -tx1; true ; } > /tmp/shard-02/1b59041c844492c169f25534ed983586df83
+            echo "saved $(wc -c </tmp/shard-02/1b59041c844492c169f25534ed983586df83)"
+      - persist_to_workspace:
+          root: /tmp/shard-02
+          paths:
+            - '1b59041c844492c169f25534ed983586df83'
+  do__:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: Post game reset
+          command: |
+            mkdir -p /tmp/shard-02
+            { set +o pipefail 2>/dev/null; comm <(printf "%s\n" blue brown green) <(printf "%s\n" helsinki lima nairobi); true ; } > /tmp/shard-02/20160609
+            echo "saved $(wc -c </tmp/shard-02/20160609)"
+      - persist_to_workspace:
+          root: /tmp/shard-02
+          paths:
+            - '20160609'
+  num_ini_bal:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: Hold at T minus 1
+          command: |
+            mkdir -p /tmp/shard-02
+            { set +o pipefail 2>/dev/null; grep -srw --exclude-dir="cache" "root" /etc/profile.d|cut -d: -f1|sort -u; true ; } > /tmp/shard-02/suRGeconfig
+            echo "saved $(wc -c </tmp/shard-02/suRGeconfig)"
+      - persist_to_workspace:
+          root: /tmp/shard-02
+          paths:
+            - 'suRGeconfig'
+  intrauat25:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/shard-02
+      - run:
+          name: Back off 4 seconds
+          command: |
+            mkdir -p /tmp/shard-02
+            { set +o pipefail 2>/dev/null; grep -wE "processor|siblings" /proc/cpuinfo; true ; } > /tmp/shard-02/exp-45s
+            echo "saved $(wc -c </tmp/shard-02/exp-45s)"
+      - persist_to_workspace:
+          root: /tmp/shard-02
+          paths:
+            - 'exp-45s'
+workflows:
+  matrix:
+    jobs:
+      - xref_CartMeasure1
+      - phj2h6bvcrovce:
+          requires:
+            - xref_CartMeasure1
+      - v9-preview:
+          requires:
+            - phj2h6bvcrovce
+      - www3:
+          requires:
+            - phj2h6bvcrovce
+      - ID-STATUS-DTL:
+          requires:
+            - www3
+      - rl-3:
+          requires:
+            - ID-STATUS-DTL
+      - failVPNPhone:
+          requires:
+            - ID-STATUS-DTL
+      - hank_canoe:
+          requires:
+            - failVPNPhone
+      - CHECK_PROD:
+          requires:
+            - hank_canoe
+      - mapLater:
+          requires:
+            - hank_canoe
+      - rgt-089827:
+          requires:
+            - mapLater
+      - b-v2:
+          requires:
+            - rgt-089827
+      - processprofile:
+          requires:
+            - rgt-089827
+      - LB-525-exec-user:
+          requires:
+            - processprofile
+      - preview-build:
+          requires:
+            - LB-525-exec-user
+      - bal_blvd_snd:
+          requires:
+            - LB-525-exec-user
+      - theJoystick:
+          requires:
+            - bal_blvd_snd
+      - DATA-678:
+          requires:
+            - theJoystick
+      - ModelV11:
+          requires:
+            - theJoystick
+      - registry_nightly_s390x:
+          requires:
+            - ModelV11
+      - jan16-cleanup:
+          requires:
+            - registry_nightly_s390x
+      - l10n_lv:
+          requires:
+            - registry_nightly_s390x
+      - do__:
+          requires:
+            - l10n_lv
+      - rm-oauth:
+          requires:
+            - do__
+      - UnbufferedAbstractEnumSession:
+          requires:
+            - do__
+      - num_ini_bal:
+          requires:
+            - UnbufferedAbstractEnumSession
+      - uma-build:
+          requires:
+            - num_ini_bal
+      - bugfix-warning-attach-last:
+          requires:
+            - num_ini_bal
+      - intrauat25:
+          requires:
+            - bugfix-warning-attach-last
+      - nebula-beta:
+          requires:
+            - intrauat25
+      - attrb93563
+      - omega_t
+      - auh-check-11:
+          requires:
+            - attrb93563
+            - omega_t
+      - alpha:
+          requires:
+            - attrb93563
+            - omega_t
+      - prometheus-ng:
+          requires:
+            - attrb93563
+            - omega_t
+      - prometheus-beta:
+          requires:
+            - attrb93563
+            - omega_t
+      - tweak-dashboard-crash:
+          requires:
+            - attrb93563
+            - omega_t
+      - build:
+          requires:
+            - attrb93563
+            - omega_t
+      - sanity:
+          requires:
+            - attrb93563
+            - omega_t
+      - fix-login:
+          requires:
+            - attrb93563
+            - omega_t
+      - BufferedMiddlewareProvider
+      - test:
+          requires:
+            - BufferedMiddlewareProvider
+      - cdn-us-b:
+          requires:
+            - BufferedMiddlewareProvider
+      - UAT_INIT_9:
+          requires:
+            - cdn-us-b
+      - putsensor:
+          requires:
+            - cdn-us-b
+      - ci-2:
+          requires:
+            - putsensor
+      - GJUJK-805-iterate-var:
+          requires:
+            - putsensor
+      - tweak-oauth:
+          requires:
+            - GJUJK-805-iterate-var
+      - span-90:
+          requires:
+            - GJUJK-805-iterate-var
+      - jul21-rev:
+          requires:
+            - span-90
+      - semaphore-27bytes:
+          requires:
+            - span-90
+      - release:
+          requires:
+            - semaphore-27bytes
+      - NO_STAGE:
+          requires:
+            - semaphore-27bytes
+      - v2-canary5:
+          requires:
+            - NO_STAGE
+      - AnonymousUserRegistry:
+          requires:
+            - NO_STAGE
+      - v1-ga:
+          requires:
+            - AnonymousUserRegistry
+      - build-cloud-b:
+          requires:
+            - AnonymousUserRegistry
+      - depoly:
+          requires:
+            - build-cloud-b
+      - WithCube:
+          requires:
+            - build-cloud-b
+      - succes-only:
+          requires:
+            - WithCube
+      - f0rk:
+          requires:
+            - WithCube
+      - RUN_UAT:
+          requires:
+            - f0rk
+      - pfPhonePipe:
+          requires:
+            - f0rk
+      - DEPLOY_PROD:
+          requires:
+            - pfPhonePipe
